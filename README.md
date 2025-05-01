@@ -33,7 +33,11 @@
 
 
 **Set Up**
-- card representation:
+- card representation: using integers 0-51
+  - (0-12) are clubs
+  - (0-12) are diamonds
+  - (0-12) are hearts
+  - (0-12) are spades
 - deck management: shuffling, drawing, no duplicate cards drawn, simulate from remaining deck correctly
 - hand evaluation: determines hand rankings
   - rank all hands properly (royal flush > straight flush > four of a kind > etc)
