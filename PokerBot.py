@@ -34,14 +34,19 @@ class PokerBot:
     def evaluate_hands(self, my_hand, opponent_hand, shared_community_cards):
         """evaluates your hand with opponents hand and determines the terminal state"""
 
-        my_score = evaluate_hand(my_hand + shared_community_cards)
-        opponent_score = evaluate_hand(opponent_hand + shared_community_cards)
+        my_score, my_tiebreakers = evaluate_hand(my_hand + shared_community_cards)
+        opponent_score, opponent_tiebreakers = evaluate_hand(opponent_hand + shared_community_cards)
         if my_score > opponent_score:  # terminal state: win
             return 1
         elif my_score < opponent_score:  # terminal state: loss
             return 0
-        else:  # terminal state: draw
-            return 0.5
+        else:  # compare tiebreaker cards
+            for my_tb, opponent_tb in zip(my_tiebreakers, opponent_tiebreakers):
+                if my_tb > opponent_tb:
+                    return 1  # win by highest card
+                elif my_tb < opponent_tb:
+                    return 0  # loss by highest card
+        return 0.5  # full tie if tiebreakers don't break ties
 
     def decide(self, my_hand, revealed_cards):
         """computes a win rate using MCTS for the current game state-- current hand--
@@ -97,6 +102,7 @@ class PokerBot:
         total_wins = sum(game_states.wins for game_states in node_stats.values())  # calculate total number of wins during simulation phase
         win_rate = total_wins / total_simulations if total_simulations > 0 else 0  # calculate average win rate over completed simulations
 
+        print("simulations ran: ", total_simulations)
         print("win rate: ", win_rate)
 
         return "stay" if win_rate >= 0.5 else "fold"

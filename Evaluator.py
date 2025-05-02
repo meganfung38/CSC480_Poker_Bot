@@ -48,11 +48,13 @@ def evaluate_hand(hand):
         """return highest card in a 5 card straight or none"""
         card_ranks = set(hand_ranks)
         # ace to 5-- 5 is the highest card here not ace
-        if {12, 0, 1, 2, 3}.issubset(card_ranks): return 3
+        if {12, 0, 1, 2, 3}.issubset(card_ranks):
+            return [3, 2, 1, 0, 12]
         # any other case, check for high = 12 (ace), high = 11 (king), ..., high = 4 (6)
         for high in range(12, 3, -1):
-            if all(((high - i) % 13) in card_ranks for i in range(5)):
-                return high
+            sequence = [(high - i) % 13 for i in range(5)]
+            if all(card_rank in card_ranks for card_rank in sequence):
+                return sequence
         return None
 
     # flush-- 5 cards of the same suit
@@ -64,12 +66,11 @@ def evaluate_hand(hand):
     if flush_suit is not None:  # possible to have a straight flush
         suited_cards = [card for card in hand if suit(card) == flush_suit] # collect cards that have flush suit
         suited_ranks = [rank(card) for card in suited_cards]  # collected ranks that have flush suit
-        straight_flush_high = get_straight(suited_ranks)  # collect best consecutive 5 ranks
-        if straight_flush_high is not None:  # straight flush exists
-            if straight_flush_high == 12:
-                return 9, [12]  # royal flush
-            else:
-                return 8, [straight_flush_high]  # straight flush
+        straight_flush = get_straight(suited_ranks)  # collect straight flush hand
+        if straight_flush:
+            if straight_flush == [12, 11, 10, 9, 8]:  # royal flush
+                return 9, straight_flush
+            return 8, straight_flush  # straight flush
 
     # check for a four of a kind-- 4 cards of the same rank and one random card
     if rank_sorted[0][0] == 4:  # there are 4 cards of the same rank
@@ -90,13 +91,14 @@ def evaluate_hand(hand):
 
     # check for flush-- 5 cards of the same suit
     if flush_suit is not None:  # we have a flush, take top ranked cards that have the flush suit
-        flush_hand = sorted([rank(card) for card in hand if suit(card) == flush_suit], reverse=True)[:5]
-        return 5, flush_hand
+        suited_cards = [rank(card) for card in hand if suit(card) == flush_suit]  # collect all cards with flush suit
+        top_flush = sorted(suited_cards, reverse=True)[:5]  # take top 5
+        return 5, top_flush
 
     # check for straight-- 5 consecutive ranks
-    straight_high = get_straight(ranks)  # see if straight can be collected
-    if straight_high is not None:
-        return 4, [straight_high]
+    top_straight = get_straight(ranks)  # see if straight can be collected
+    if top_straight is not None:
+        return 4, top_straight
 
     # three of a kind
     if rank_sorted[0][0] == 3:
