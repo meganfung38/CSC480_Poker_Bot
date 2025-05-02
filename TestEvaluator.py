@@ -14,11 +14,11 @@ class TestEvaluator(unittest.TestCase):
 
     def test_royal_flush(self):
         hand = hand_from_strs(['T♠', 'J♠', 'Q♠', 'K♠', 'A♠', '2♦', '3♣'])
-        self.assertEqual(evaluate_hand(hand), (9, [12]))
+        self.assertEqual(evaluate_hand(hand), (9, [12, 11, 10, 9, 8]))
 
     def test_straight_flush(self):
         hand = hand_from_strs(['9♦', 'T♦', 'J♦', 'Q♦', 'K♦', '2♠', '3♣'])
-        self.assertEqual(evaluate_hand(hand), (8, [11]))
+        self.assertEqual(evaluate_hand(hand), (8, [11, 10, 9, 8, 7]))
 
     def test_four_of_a_kind(self):
         hand = hand_from_strs(['9♣', '9♦', '9♥', '9♠', 'K♦', '2♠', '3♣'])
@@ -34,11 +34,11 @@ class TestEvaluator(unittest.TestCase):
 
     def test_straight(self):
         hand = hand_from_strs(['5♣', '6♦', '7♠', '8♥', '9♣', '2♠', 'Q♦'])
-        self.assertEqual(evaluate_hand(hand), (4, [7]))
+        self.assertEqual(evaluate_hand(hand), (4, [7, 6, 5, 4, 3]))
 
     def test_wheel_straight(self):
         hand = hand_from_strs(['A♣', '2♦', '3♣', '4♠', '5♠', 'K♦', 'Q♣'])
-        self.assertEqual(evaluate_hand(hand), (4, [3]))  # 5-high straight
+        self.assertEqual(evaluate_hand(hand), (4, [3, 2, 1, 0, 12]))  # 5-high straight
 
     def test_three_of_a_kind(self):
         hand = hand_from_strs(['J♣', 'J♦', 'J♠', '4♠', '5♦', '9♥', '2♠'])

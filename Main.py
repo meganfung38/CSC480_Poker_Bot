@@ -27,7 +27,7 @@ def simulate_game(my_hand, community_cards, opponent_hand):
     decision = bot.decide(my_hand, [])
     print("Bot Decision: ", decision)
     if decision == "fold":
-            return
+            return -1
 
     # pre turn
     print("Pre-Turn -> my hand: ", show_hand(my_hand))
@@ -35,7 +35,7 @@ def simulate_game(my_hand, community_cards, opponent_hand):
     decision = bot.decide(my_hand, community_cards[:3])
     print("Bot Decision: ", decision)
     if decision == "fold":
-        return
+        return -1
 
     # pre river
     print("Pre-River -> my hand: ", show_hand(my_hand))
@@ -43,7 +43,7 @@ def simulate_game(my_hand, community_cards, opponent_hand):
     decision = bot.decide(my_hand, community_cards[:4])
     print("Bot Decision: ", decision)
     if decision == "fold":
-        return
+        return -1
 
     # river revealing
     print("Final Round -> my hand: ", show_hand(my_hand))
@@ -57,24 +57,16 @@ def simulate_game(my_hand, community_cards, opponent_hand):
 
     if result == 1:
         print("You won!")
+        return 1
     elif result == 0:
         print("You lost!")
+        return 0
     else:
         print("It was a draw!")
+        return 0.5
 
 
 
 if __name__=="__main__":
-    # my_random_hand, community, random_opponent_hand = random_setup()
-
-    # draw-- both use community cards
-    # my_random_hand = [51, 24]  # A♠ and K♦
-    # community = [49, 48, 47, 46, 45]  # Q♠, J♠, T♠, 9♠, 8♠
-    # random_opponent_hand = [44, 27]  # 7♠ and 2♥
-
-    # win
-    my_random_hand = [51, 50]  # A♠ and K♠
-    community = [49, 48, 47, 46, 45]  # Q♠, J♠, T♠, 9♠, 8♠
-    random_opponent_hand = [44, 27]  # 7♠ and 2♥
-
+    my_random_hand, community, random_opponent_hand = random_setup()
     simulate_game(my_random_hand, community, random_opponent_hand)
