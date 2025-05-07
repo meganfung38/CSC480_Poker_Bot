@@ -1,5 +1,5 @@
 import unittest
-from Main import simulate_game
+from PokerBot import simulate_game
 
 
 class TestPokerBot(unittest.TestCase):

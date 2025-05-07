@@ -47,14 +47,17 @@ def evaluate_hand(hand):
     def get_straight(hand_ranks):
         """return highest card in a 5 card straight or none"""
         card_ranks = set(hand_ranks)
-        # ace to 5-- 5 is the highest card here not ace
-        if {12, 0, 1, 2, 3}.issubset(card_ranks):
-            return [3, 2, 1, 0, 12]
-        # any other case, check for high = 12 (ace), high = 11 (king), ..., high = 4 (6)
+
+        # check for high = 12 (ace), high = 11 (king), ..., high = 4 (6)
         for high in range(12, 3, -1):
             sequence = [(high - i) % 13 for i in range(5)]
             if all(card_rank in card_ranks for card_rank in sequence):
                 return sequence
+
+        # ace to 5-- 5 is the highest card here not ace
+        if {12, 0, 1, 2, 3}.issubset(card_ranks):
+            return [3, 2, 1, 0, 12]
+
         return None
 
     # flush-- 5 cards of the same suit
